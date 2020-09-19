@@ -9,7 +9,8 @@ public enum ErrorCode {
     INTERNAL_ERROR("خطای داخلی سرویس دهنده" , 2),
     DUPLICATE_DATA("داده تکراری است",3),
     DATA_MISMATCH("عدم همخوانی داده های ارائه شده", 4),
-    DATA_MISMATCH_WITH_PROTOCOL("عدم همخوانی داده های ارائه شده  با قراردادهای سرویس", 5);
+    DATA_MISMATCH_WITH_PROTOCOL("عدم همخوانی داده های ارائه شده  با قراردادهای سرویس", 5),
+    USER_NOT_EXIST("کاربر مورد نظر یافت نشد", 6);
 
 
     private final String message;

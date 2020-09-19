@@ -1,5 +1,6 @@
 package com.digipay.cardmanagement.web.rest;
 
+import com.digipay.cardmanagement.dto.CreateCardDto;
 import com.digipay.cardmanagement.dto.UserDto;
 import com.digipay.cardmanagement.exceptions.ServiceException;
 import com.digipay.cardmanagement.service.UserService;
@@ -29,6 +30,15 @@ public class UserController {
             throws ServiceException {
         logger.debug("REST request to save user : {}", userDto);
         UserDto result = userService.createUser(userDto);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/addCards")
+    public ResponseEntity<UserDto> addCardToUser(@Valid @RequestBody CreateCardDto createCardDto)
+            throws ServiceException {
+        logger.debug("REST request to save card : {} for userId {}", createCardDto, createCardDto.getUserId());
+        UserDto result = userService.addCardToUser(createCardDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

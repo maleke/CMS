@@ -22,8 +22,8 @@ public class User implements Serializable {
     private String phoneNumber;
 
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   // @org.springframework.data.annotation.Transient
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @org.springframework.data.annotation.Transient
     private List<Card> cards = new ArrayList<>();
 
     public User() {
@@ -65,10 +65,7 @@ public class User implements Serializable {
         this.cards = cards;
         return this;
     }
-
-
     //endregion
-
 
     @Override
     public String toString() {
@@ -76,7 +73,6 @@ public class User implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", cards=" + cards +
                 '}';
     }
 }

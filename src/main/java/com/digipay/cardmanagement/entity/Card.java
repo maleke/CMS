@@ -115,7 +115,6 @@ public class Card implements Serializable {
                 ", expDate='" + expDate + '\'' +
                 ", pin='" + pin + '\'' +
                 ", amount='" + amount + '\'' +
-                ", user=" + user +
                 '}';
     }
 }
