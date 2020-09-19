@@ -17,28 +17,27 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+  private final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
+  private final UserService userService;
 
-    private final org.slf4j.Logger logger = LoggerFactory.getLogger(UserController.class);
-    private final UserService userService;
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+  @PostMapping
+  public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
+      throws ServiceException {
+    logger.debug("REST request to save user : {}", userDto);
+    UserDto result = userService.createUser(userDto);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
 
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
-            throws ServiceException {
-        logger.debug("REST request to save user : {}", userDto);
-        UserDto result = userService.createUser(userDto);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-
-    @PostMapping("/addCards")
-    public ResponseEntity<UserDto> addCardToUser(@Valid @RequestBody CreateCardDto createCardDto)
-            throws ServiceException {
-        logger.debug("REST request to save card : {} for userId {}", createCardDto, createCardDto.getUserId());
-        UserDto result = userService.addCardToUser(createCardDto);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+  @PostMapping("/addCards")
+  public ResponseEntity<UserDto> addCardToUser(@Valid @RequestBody CreateCardDto createCardDto)
+      throws ServiceException {
+    logger.debug(
+        "REST request to save card : {} for userId {}", createCardDto, createCardDto.getUserId());
+    UserDto result = userService.addCardToUser(createCardDto);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
 }

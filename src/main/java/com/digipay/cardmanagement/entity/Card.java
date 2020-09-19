@@ -6,115 +6,104 @@ import java.io.Serializable;
 @Entity
 @Table(name = "card")
 public class Card implements Serializable {
-    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id",updatable = false, nullable = false)
-    @SequenceGenerator(name = "card_id_seq", sequenceName = "card_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_id_seq")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id", updatable = false, nullable = false)
+  //    @SequenceGenerator(name = "card_id_seq", sequenceName = "card_id_seq", allocationSize = 1)
+  //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_id_seq")
+  private Long id;
 
-    private String source;
-    private String dest;
-    private String cvv2;
-    @Column(name = "exp_date")
-    private String expDate;
-    private String pin;
-    private String amount;
+  @Column(name = "card_number", unique = true)
+  private String cardNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+  private String cvv2;
 
-    public Card() {
-    }
+  @Column(name = "exp_date")
+  private String expDate;
 
-    //region getterAndSetter
+  private String pin;
 
-    public Long getId() {
-        return id;
-    }
+  @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
-    public Card setId(Long id) {
-        this.id = id;
-        return this;
-    }
+  public Card() {}
 
-    public String getSource() {
-        return source;
-    }
+  // region getterAndSetter
 
-    public Card setSource(String source) {
-        this.source = source;
-        return this;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getDest() {
-        return dest;
-    }
+  public Card setId(Long id) {
+    this.id = id;
+    return this;
+  }
 
-    public Card setDest(String dest) {
-        this.dest = dest;
-        return this;
-    }
+  public String getCardNumber() {
+    return cardNumber;
+  }
 
-    public String getCvv2() {
-        return cvv2;
-    }
+  public Card setCardNumber(String cardNumber) {
+    this.cardNumber = cardNumber;
+    return this;
+  }
 
-    public Card setCvv2(String cvv2) {
-        this.cvv2 = cvv2;
-        return this;
-    }
+  public String getCvv2() {
+    return cvv2;
+  }
 
-    public String getExpDate() {
-        return expDate;
-    }
+  public Card setCvv2(String cvv2) {
+    this.cvv2 = cvv2;
+    return this;
+  }
 
-    public Card setExpDate(String expDate) {
-        this.expDate = expDate;
-        return this;
-    }
+  public String getExpDate() {
+    return expDate;
+  }
 
-    public String getPin() {
-        return pin;
-    }
+  public Card setExpDate(String expDate) {
+    this.expDate = expDate;
+    return this;
+  }
 
-    public Card setPin(String pin) {
-        this.pin = pin;
-        return this;
-    }
+  public String getPin() {
+    return pin;
+  }
 
-    public String getAmount() {
-        return amount;
-    }
+  public Card setPin(String pin) {
+    this.pin = pin;
+    return this;
+  }
 
-    public Card setAmount(String amount) {
-        this.amount = amount;
-        return this;
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public User getUser() {
-        return user;
-    }
+  public Card setUser(User user) {
+    this.user = user;
+    return this;
+  }
 
-    public Card setUser(User user) {
-        this.user = user;
-        return this;
-    }
+  // endregion
 
-    //endregion
-
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "id=" + id +
-                ", source='" + source + '\'' +
-                ", dest='" + dest + '\'' +
-                ", cvv2='" + cvv2 + '\'' +
-                ", expDate='" + expDate + '\'' +
-                ", pin='" + pin + '\'' +
-                ", amount='" + amount + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Card{"
+        + "id="
+        + id
+        + ", cardNumber='"
+        + cardNumber
+        + '\''
+        + ", cvv2='"
+        + cvv2
+        + '\''
+        + ", expDate='"
+        + expDate
+        + '\''
+        + ", pin='"
+        + pin
+        + '\''
+        + '}';
+  }
 }

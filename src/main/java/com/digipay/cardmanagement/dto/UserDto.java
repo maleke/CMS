@@ -43,4 +43,12 @@ public class UserDto implements Serializable {
     }
 
     //endregion
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }
