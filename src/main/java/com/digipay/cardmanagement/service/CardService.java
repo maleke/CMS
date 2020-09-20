@@ -22,10 +22,9 @@ public class CardService {
         this.cardMapper = cardMapper;
     }
 
-    public void deleteCard(Long id) throws ServiceException {
+    public void deleteCard(Long id) {
         logger.info("Ready to delete card with id {}", id);
         cardRepository.deleteById(id);
-
     }
 
     public List<CardDto> findCardsByUserId(Long userId) {
