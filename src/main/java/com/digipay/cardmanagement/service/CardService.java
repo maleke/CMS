@@ -84,8 +84,6 @@ public class CardService {
     //            .setMobileNo("user.getPhoneNumber()")
     //            .setMessage(Constants.SUCCESSFUL_TRANSFER_MONEY);
     // using queue to message increase performance
-    //    Message<ProviderMessageRequestDTO> msg =
-    //        MessageBuilder.withPayload(providerMessageRequestDTO).build();
 
     rabbitTemplate.convertAndSend(
         Constants.EXCHANGE_NAME, Constants.ROUTING_KEY_NAME, providerMessageRequestDTO);
