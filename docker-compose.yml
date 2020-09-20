@@ -1,23 +1,23 @@
 version: '3.3'
 services:
-    rabbitmq:
-        ports:
-            - '5672:5672'
-            - '15672:15672'
-        container_name: rabbitmq
-        image: 'rabbitmq:3.8.8-management'
+  rabbitmq:
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    container_name: rabbitmq
+    image: 'rabbitmq:3.8.8-management'
 
-    postgres:
-        ports:
-            - '5432:5432'
-#        volumes:
-#            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-#            - pgdata:/var/lib/postgresql/data
-        container_name: postgres
-        environment:
-            - POSTGRES_PASSWORD=postgres
-        image: 'postgres:12.4'
-
-volumes:
-    pgdata:
-        driver: local
+#    postgres:
+#        ports:
+#            - '5432:5432'
+##        volumes:
+##            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+##            - pgdata:/var/lib/postgresql/data
+#        container_name: postgres
+#        environment:
+#            - POSTGRES_PASSWORD=postgres
+#        image: 'postgres:12.4'
+#
+#volumes:
+#    pgdata:
+#        driver: local

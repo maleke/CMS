@@ -6,49 +6,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDto implements Serializable {
-    @NotNull(message = "{null.name}")
-    private String name;
+  @NotNull(message = "{null.name}")
+  private String name;
 
-    private String phoneNumber;
+  @NotNull(message = "{null.phoneNumber}")
+  private String phoneNumber;
 
-    private List<CardDto> cards = new ArrayList<>();
+  private List<CardDto> cards = new ArrayList<>();
 
-    //region getter And setter
+  // region getter And setter
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public UserDto setName(String name) {
-        this.name = name;
-        return this;
-    }
+  public UserDto setName(String name) {
+    this.name = name;
+    return this;
+  }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-    public UserDto setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-        return this;
-    }
+  public UserDto setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+    return this;
+  }
 
-    public List<CardDto> getCards() {
-        return cards;
-    }
+  public List<CardDto> getCards() {
+    return cards;
+  }
 
-    public UserDto setCards(List<CardDto> cards) {
-        this.cards = cards;
-        return this;
-    }
+  public UserDto setCards(List<CardDto> cards) {
+    this.cards = cards;
+    return this;
+  }
 
-    //endregion
+  // endregion
 
-    @Override
-    public String toString() {
-        return "UserDto{" +
-                "name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "UserDto{" + "name='" + name + '\'' + ", phoneNumber='" + phoneNumber + '\'' + '}';
+  }
 }
