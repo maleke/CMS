@@ -1,6 +1,6 @@
 package com.digipay.cardmanagement.web.rest;
 
-import com.digipay.cardmanagement.dto.UserDto;
+import com.digipay.cardmanagement.dto.CardDto;
 import com.digipay.cardmanagement.exceptions.ServiceException;
 import com.digipay.cardmanagement.service.CardService;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/cards")
@@ -29,5 +29,13 @@ public class CardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<CardDto>> findCardsByUserId(@PathVariable Long userId)
+            throws ServiceException {
+
+        List<CardDto> result = cardService.findCardsByUserId(userId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }
