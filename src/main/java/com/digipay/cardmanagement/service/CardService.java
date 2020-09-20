@@ -1,6 +1,7 @@
 package com.digipay.cardmanagement.service;
 
 import com.digipay.cardmanagement.dto.CardDto;
+import com.digipay.cardmanagement.dto.CardTransferRequestDto;
 import com.digipay.cardmanagement.entity.Card;
 import com.digipay.cardmanagement.exceptions.ServiceException;
 import com.digipay.cardmanagement.mapper.CardMapper;
@@ -30,5 +31,9 @@ public class CardService {
     public List<CardDto> findCardsByUserId(Long userId) {
         List<Card> cards = cardRepository.findByUserId(userId);
         return cardMapper.cardsToCardDtos(cards);
+    }
+
+    public void cardTransfer(CardTransferRequestDto cardTransferRequestDto) {
+        //call service for transferring money
     }
 }
