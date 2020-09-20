@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
-    List<Card> findByUserId(@Param("userId") Long userId);
+  List<Card> findByUserId(@Param("userId") Long userId);
+
+  Long findBycardNumber(@Param("cardNumber") String cardNumber);
 }
