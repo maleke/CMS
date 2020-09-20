@@ -14,6 +14,7 @@ import com.digipay.cardmanagement.web.rest.UserController;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -69,4 +70,6 @@ public class UserService {
     saveUser(user, cards, "this card number already exist");
     return userMapper.userToUserDto(user);
   }
+
+
 }

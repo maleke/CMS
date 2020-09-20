@@ -135,7 +135,7 @@ public class ExceptionTranslator {
     public FieldErrorDTO processDataIntegrityViolationException(DataIntegrityViolationException exception) {
         return new FieldErrorDTO()
                 .setErrorCode(String.valueOf(ErrorCode.INTERNAL_ERROR.getCode()))
-                .setErrorDescription("some input value are incorrect");
+                .setErrorDescription("some input value may be missed or incorrect");
     }
 
     @ExceptionHandler(ServiceException.class)
