@@ -5,96 +5,100 @@ import com.digipay.cardmanagement.common.dto.ProviderMessageRequestDTO;
 import com.digipay.cardmanagement.dto.CardDto;
 import com.digipay.cardmanagement.dto.CardTransferRequestDto;
 import com.digipay.cardmanagement.entity.Card;
+import com.digipay.cardmanagement.entity.TransactionLog;
 import com.digipay.cardmanagement.entity.User;
-import com.digipay.cardmanagement.interfaces.PaymentProvider;
+import com.digipay.cardmanagement.enums.TransactionStatus;
+import com.digipay.cardmanagement.exceptions.ServiceException;
+import com.digipay.cardmanagement.exceptions.error.ErrorCode;
+import com.digipay.cardmanagement.exceptions.error.FieldErrorDTO;
 import com.digipay.cardmanagement.mapper.CardMapper;
 import com.digipay.cardmanagement.repository.CardRepository;
+import com.digipay.cardmanagement.service.payment.PaymentService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CardService {
-  private final org.slf4j.Logger logger = LoggerFactory.getLogger(CardService.class);
+    private final org.slf4j.Logger logger = LoggerFactory.getLogger(CardService.class);
 
-  private final CardRepository cardRepository;
-  private final CardMapper cardMapper;
-  private final Map<String, PaymentProvider> paymentProviderStrategy;
-  private final RabbitTemplate rabbitTemplate;
-  private final UserService userService;
+    private final CardRepository cardRepository;
+    private final CardMapper cardMapper;
+    private final RabbitTemplate rabbitTemplate;
+    private final UserService userService;
+    private final PaymentService paymentService;
 
-  public CardService(
-      CardRepository cardRepository,
-      CardMapper cardMapper,
-      Map<String, PaymentProvider> paymentProviderStrategy,
-      RabbitTemplate rabbitTemplate,
-      UserService userService) {
-    this.cardRepository = cardRepository;
-    this.cardMapper = cardMapper;
-    this.paymentProviderStrategy = paymentProviderStrategy;
-    this.rabbitTemplate = rabbitTemplate;
-    this.userService = userService;
-  }
-
-  @PostConstruct
-  public void transfer() {
-    CardTransferRequestDto cardTransferRequestDto =
-        new CardTransferRequestDto()
-            .setSource("5892232")
-            .setAmount(1000L)
-            .setDest("6037")
-            .setExpDate("0300")
-            .setPin("1234");
-    cardTransfer(cardTransferRequestDto);
-  }
-
-  public void deleteCard(Long id) {
-    logger.info("Ready to delete card with id {}", id);
-    cardRepository.deleteById(id);
-  }
-
-  public List<CardDto> findCardsByUserId(Long userId) {
-    List<Card> cards = cardRepository.findByUserId(userId);
-    return cardMapper.cardsToCardDtos(cards);
-  }
-
-  public void cardTransfer(CardTransferRequestDto cardTransferRequestDto) {
-    // call service for transferring money
-    String paymentProviderName =
-        cardTransferRequestDto.getSource().startsWith("6037")
-            ? "paymentProvider1"
-            : "paymentProvider2";
-    PaymentProvider paymentProvider = findPaymentProvider(paymentProviderName);
-    Boolean result = paymentProvider.transferMoney(cardTransferRequestDto);
-    if (result) {
-      sendMessage(cardTransferRequestDto.getSource());
+    public CardService(
+            CardRepository cardRepository,
+            CardMapper cardMapper,
+            RabbitTemplate rabbitTemplate,
+            UserService userService, PaymentService paymentService) {
+        this.cardRepository = cardRepository;
+        this.cardMapper = cardMapper;
+        this.rabbitTemplate = rabbitTemplate;
+        this.userService = userService;
+        this.paymentService = paymentService;
     }
-  }
 
-  private void sendMessage(String cardNumber) {
-    // User user = findUserBySource(cardNumber);
-    ProviderMessageRequestDTO providerMessageRequestDTO =
-        new ProviderMessageRequestDTO("user.getPhoneNumber()", Constants.SUCCESSFUL_TRANSFER_MONEY);
-    //    ProviderMessageRequestDTO providerMessageRequestDTO =
-    //        new ProviderMessageRequestDTO()
-    //            .setMobileNo("user.getPhoneNumber()")
-    //            .setMessage(Constants.SUCCESSFUL_TRANSFER_MONEY);
-    // using queue to message increase performance
+    public void deleteCard(Long id) {
+        logger.info("Ready to delete card with id {}", id);
+        cardRepository.deleteById(id);
+    }
 
-    rabbitTemplate.convertAndSend(
-        Constants.EXCHANGE_NAME, Constants.ROUTING_KEY_NAME, providerMessageRequestDTO);
-  }
+    public List<CardDto> findCardsByUserId(Long userId) {
+        List<Card> cards = cardRepository.findByUserId(userId);
+        return cardMapper.cardsToCardDtos(cards);
+    }
 
-  private User findUserBySource(String source) {
-    Long userId = cardRepository.findBycardNumber(source);
-    return userService.getById(userId).get();
-  }
+    public void cardTransfer(CardTransferRequestDto cardTransferRequestDto) throws ServiceException {
+        // call service for transferring money
+        Boolean result = paymentService.transferMoney(cardTransferRequestDto);
+        insertTransactionToDB(cardTransferRequestDto, result);
+        if (result) {
+            sendMessage(cardTransferRequestDto.getSource());
+        }
 
-  private PaymentProvider findPaymentProvider(String cardNumber) {
-    return paymentProviderStrategy.get(cardNumber);
-  }
+    }
+
+    //call DatabaseQueueReceiver
+    private void insertTransactionToDB(CardTransferRequestDto cardTransferRequestDto, Boolean result) {
+        TransactionLog transactionLog = new TransactionLog()
+                .setCardNumber(cardTransferRequestDto.getSource())
+                .setCvv2(cardTransferRequestDto.getCvv2())
+                .setExpDate(cardTransferRequestDto.getExpDate())
+                .setPin(cardTransferRequestDto.getPin());
+
+        if (result)
+            transactionLog.setTransactionStatus(TransactionStatus.SUCCESS);
+        else
+            transactionLog.setTransactionStatus(TransactionStatus.FAILED);
+
+        rabbitTemplate.convertAndSend(
+                Constants.EXCHANGE_NAME, Constants.DATABASE_ROUTING_KEY_NAME, transactionLog);
+    }
+
+    @HystrixCommand(fallbackMethod = "reliable")
+    private void sendMessage(String cardNumber) throws ServiceException {
+        User user = findUserBySource(cardNumber);
+        ProviderMessageRequestDTO providerMessageRequestDTO =
+                new ProviderMessageRequestDTO()
+                        .setMobileNo(user.getPhoneNumber())
+                        .setMessage(Constants.SUCCESSFUL_TRANSFER_MONEY);
+        // using queue to notification service for increasing performance
+        rabbitTemplate.convertAndSend(
+                Constants.EXCHANGE_NAME, Constants.NOTIFICATION_ROUTING_KEY_NAME, providerMessageRequestDTO);
+    }
+
+    public String reliable() {
+        return "Cloud Native Java (O'Reilly)";
+    }
+
+    private User findUserBySource(String source) throws ServiceException {
+        return cardRepository.findUserByCardNumber(source).orElseThrow(() -> new ServiceException(new FieldErrorDTO()
+                .setErrorDescription(ErrorCode.USER_NOT_EXIST.getMessage()).setErrorCode(String.valueOf(ErrorCode.USER_NOT_EXIST.getCode()))));
+    }
 }

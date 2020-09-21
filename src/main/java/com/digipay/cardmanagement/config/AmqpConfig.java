@@ -23,17 +23,33 @@ public class AmqpConfig {
   }
 
   @Bean
-  Queue repoFetchQueue() {
+  Queue notificationFetchQueue() {
     return QueueBuilder.durable(Constants.INCOMING_QUEUE_NAME)
         .withArgument("x-dead-letter-exchange", "")
         .withArgument("x-dead-letter-routing-key", Constants.DEAD_LETTER_QUEUE_NAME)
         .build();
   }
-
   @Bean
   Binding binding() {
-    return BindingBuilder.bind(repoFetchQueue()).to(exchange()).with(Constants.ROUTING_KEY_NAME);
+    return BindingBuilder.bind(notificationFetchQueue())
+            .to(exchange()).with(Constants.NOTIFICATION_ROUTING_KEY_NAME);
   }
+
+  @Bean
+  public Queue databaseFetchQueue() {
+    return QueueBuilder.durable(Constants.DATABASE_QUEUE_NAME)
+            .withArgument("database-dead-letter-exchange", "")
+            .withArgument("database-dead-letter-routing-key", Constants.DATABASE_DEAD_LETTER_QUEUE_NAME)
+            .build();
+  }
+
+  @Bean
+  public Binding binding2() {
+    return BindingBuilder.bind(databaseFetchQueue())
+            .to(exchange())
+            .with(Constants.DATABASE_ROUTING_KEY_NAME);
+  }
+
 
   @Bean
   Queue deadLetterQueue() {

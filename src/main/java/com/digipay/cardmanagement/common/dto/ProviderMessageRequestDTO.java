@@ -9,6 +9,9 @@ public class ProviderMessageRequestDTO implements Serializable {
   private String mobileNo;
   private String message;
 
+  public ProviderMessageRequestDTO() {
+  }
+
   public ProviderMessageRequestDTO(
       @JsonProperty("mobileNo") String mobileNo, @JsonProperty("message") String message) {
     this.mobileNo = mobileNo;

@@ -10,11 +10,11 @@ import java.util.Set;
 @Table(name = "digi_user")
 public class User implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+ // @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", updatable = false, nullable = false)
-  //    @SequenceGenerator(name = "digi_user_id_seq", sequenceName = "digi_user_id_seq",
-  // allocationSize = 1)
-  //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "digi_user_id_seq")
+      @SequenceGenerator(name = "digi_user_id_seq", sequenceName = "digi_user_id_seq",
+   allocationSize = 1)
+      @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "digi_user_id_seq")
   private Long id;
 
   @Column(unique = true)
