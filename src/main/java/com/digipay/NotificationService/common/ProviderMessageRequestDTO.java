@@ -9,11 +9,14 @@ public class ProviderMessageRequestDTO implements Serializable {
     private String mobileNo;
     private String message;
 
-    public ProviderMessageRequestDTO(
-            @JsonProperty("mobileNo") String mobileNo, @JsonProperty("message") String message) {
-        this.mobileNo = mobileNo;
-        this.message = message;
+    public ProviderMessageRequestDTO() {
     }
+
+//    public ProviderMessageRequestDTO(
+//            @JsonProperty("mobileNo") String mobileNo, @JsonProperty("message") String message) {
+//        this.mobileNo = mobileNo;
+//        this.message = message;
+//    }
     //region getter and setter
 
     public String getMobileNo() {
