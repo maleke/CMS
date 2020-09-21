@@ -1,29 +1,32 @@
 package com.digipay.cardmanagement.dto;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class TransactionDto implements Serializable {
-    private String startDate;
-    private String endTime;
+  @Size(min = 14, max = 14, message = "{size.startDateTime}")
+  private String startDateTime;
 
-    public TransactionDto() {
-    }
+  @Size(min = 14, max = 14, message = "{size.endDateTime}")
+  private String endDateTime;
 
-    public String getStartDate() {
-        return startDate;
-    }
+  public TransactionDto() {}
 
-    public TransactionDto setStartDate(String startDate) {
-        this.startDate = startDate;
-        return this;
-    }
+  public String getStartDateTime() {
+    return startDateTime;
+  }
 
-    public String getEndTime() {
-        return endTime;
-    }
+  public TransactionDto setStartDateTime(String startDateTime) {
+    this.startDateTime = startDateTime;
+    return this;
+  }
 
-    public TransactionDto setEndTime(String endTime) {
-        this.endTime = endTime;
-        return this;
-    }
+  public String getEndDateTime() {
+    return endDateTime;
+  }
+
+  public TransactionDto setEndDateTime(String endDateTime) {
+    this.endDateTime = endDateTime;
+    return this;
+  }
 }

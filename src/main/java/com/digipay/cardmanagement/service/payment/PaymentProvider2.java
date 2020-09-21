@@ -9,6 +9,7 @@ public class PaymentProvider2 implements PaymentProvider {
 
   @Override
   public Boolean transferMoney(CardTransferRequestDto cardTransferRequestDto) {
+    // call web service
     return true;
   }
 
