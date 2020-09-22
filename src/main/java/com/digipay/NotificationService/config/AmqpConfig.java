@@ -56,4 +56,5 @@ public class AmqpConfig {
     rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
     return rabbitTemplate;
 }
+
 }
