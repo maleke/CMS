@@ -50,7 +50,6 @@ public class AmqpConfig {
             .with(Constants.DATABASE_ROUTING_KEY_NAME);
   }
 
-
   @Bean
   Queue deadLetterQueue() {
     return QueueBuilder.durable(Constants.DEAD_LETTER_QUEUE_NAME).build();

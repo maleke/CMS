@@ -1,7 +1,5 @@
 package com.digipay.cardmanagement.entity;
 
-import com.digipay.cardmanagement.enums.TransactionStatus;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -15,13 +13,13 @@ import java.io.Serializable;
     })
 public class TransactionLog implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  //@GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", updatable = false, nullable = false)
-  //  @SequenceGenerator(
-  //      name = "transaction_log_id_seq",
-  //      sequenceName = "transaction_log_id_seq",
-  //      allocationSize = 1)
-  //  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_log_id_seq")
+    @SequenceGenerator(
+        name = "transaction_log_id_seq",
+        sequenceName = "transaction_log_id_seq",
+        allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_log_id_seq")
   private Long id;
 
   @NotNull(message = "{null.cardNumber}")
@@ -42,10 +40,11 @@ public class TransactionLog implements Serializable {
   @Column(name = "transaction_date")
   private String transactionDate;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "transaction_status")
-  private TransactionStatus transactionStatus = TransactionStatus.FAILED;
+  @Column(name = "success_status")
+  private Long successStatus;
 
+  @Column(name = "fail_status")
+  private Long failStatus;
   // region getter And setter
 
   public String getSource() {
@@ -102,31 +101,35 @@ public class TransactionLog implements Serializable {
     return this;
   }
 
-  public TransactionStatus getTransactionStatus() {
-    return transactionStatus;
+  public Long getSuccessStatus() {
+    return successStatus;
   }
 
-  public TransactionLog setTransactionStatus(TransactionStatus transactionStatus) {
-    this.transactionStatus = transactionStatus;
+  public TransactionLog setSuccessStatus(Long successStatus) {
+    this.successStatus = successStatus;
+    return this;
+  }
+
+  public Long getFailStatus() {
+    return failStatus;
+  }
+
+  public TransactionLog setFailStatus(Long failStatus) {
+    this.failStatus = failStatus;
     return this;
   }
 
   // endregion
 
+
   @Override
   public String toString() {
-    return "TransactionLog{"
-        + "source='"
-        + source
-        + '\''
-        + ", dest='"
-        + dest
-        + '\''
-        + ", transactionDate='"
-        + transactionDate
-        + '\''
-        + ", transactionStatus="
-        + transactionStatus
-        + '}';
+    return "TransactionLog{" +
+            "source='" + source + '\'' +
+            ", dest='" + dest + '\'' +
+            ", transactionDate='" + transactionDate + '\'' +
+            ", successStatus=" + successStatus +
+            ", failStatus=" + failStatus +
+            '}';
   }
 }

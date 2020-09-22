@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,7 +24,7 @@ public class TransactionController {
   }
 
   @PostMapping("/transactions")
-  ResponseEntity<Page<TransactionLogDto>> getTransactionReport(
+  ResponseEntity<List<TransactionLogDto>> getTransactionReport(
       @RequestBody TransactionDto transactionDto,
       @RequestParam int page,
       @RequestParam int total,
@@ -38,7 +39,7 @@ public class TransactionController {
             .setTotal(total)
             .setDirection(direction)
             .setFilter(query);
-    Page<TransactionLogDto> result =
+    List<TransactionLogDto> result =
         transactionService.getTransactionReport(transactionDto, searchablePage);
     return new ResponseEntity<>(result, HttpStatus.OK);
   }

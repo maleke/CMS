@@ -1,14 +1,16 @@
 package com.digipay.cardmanagement.dto;
 
-import com.digipay.cardmanagement.enums.TransactionStatus;
+import com.digipay.cardmanagement.common.search.Searchable;
 
 import java.io.Serializable;
 
 public class TransactionLogDto implements Serializable {
 
   private String source;
-  private TransactionStatus staus;
-  private Long count;
+  private Long successStausCount;
+  private Long failStausCount;
+
+
 
   public TransactionLogDto() {}
 
@@ -16,16 +18,12 @@ public class TransactionLogDto implements Serializable {
     this.source = source;
   }
 
-  public TransactionLogDto(String source, TransactionStatus staus) {
+  public TransactionLogDto(String source, Long successStausCount, Long failStausCount) {
     this.source = source;
-    this.staus = staus;
+    this.successStausCount = successStausCount;
+    this.failStausCount = failStausCount;
   }
 
-  public TransactionLogDto(String source, TransactionStatus staus, Long count) {
-    this.source = source;
-    this.staus = staus;
-    this.count = count;
-  }
   // region getter and setter
 
   public String getSource() {
@@ -37,37 +35,34 @@ public class TransactionLogDto implements Serializable {
     return this;
   }
 
-  public TransactionStatus getStaus() {
-    return staus;
+  public Long getSuccessStausCount() {
+    return successStausCount;
   }
 
-  public TransactionLogDto setStaus(TransactionStatus staus) {
-    this.staus = staus;
+  public TransactionLogDto setSuccessStausCount(Long successStausCount) {
+    this.successStausCount = successStausCount;
     return this;
   }
 
-  public Long getCount() {
-    return count;
+  public Long getFailStausCount() {
+    return failStausCount;
   }
 
-  public TransactionLogDto setCount(Long count) {
-    this.count = count;
+  public TransactionLogDto setFailStausCount(Long failStausCount) {
+    this.failStausCount = failStausCount;
     return this;
   }
+
 
   // endregion
 
+
   @Override
   public String toString() {
-    return "TransactionLogDto{"
-        + "cardNumber='"
-        + source
-        + '\''
-        + ", staus='"
-        + staus
-        + '\''
-        + ", count="
-        + count
-        + '}';
+    return "TransactionLogDto{" +
+            "source='" + source + '\'' +
+            ", successStausCount=" + successStausCount +
+            ", failStausCount=" + failStausCount +
+            '}';
   }
 }

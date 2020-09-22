@@ -7,7 +7,6 @@ import com.digipay.cardmanagement.dto.TransactionLogDto;
 import com.digipay.cardmanagement.exceptions.ServiceException;
 import com.digipay.cardmanagement.repository.TransactionReportRepository;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,16 +22,14 @@ public class TransactionReportService {
     this.transactionRepository = transactionRepository;
   }
 
-  public Page<TransactionLogDto> getTransactionReport(
+  public List<TransactionLogDto> getTransactionReport(
       TransactionDto transactionDto, SearchablePage searchablePage) throws ServiceException {
     String startDateTime = transactionDto.getStartDateTime();
     String endDateTime = transactionDto.getEndDateTime();
     PageRequest pageRequest = SearchUtils.getPageRequest(searchablePage);
-    //    Page<TransactionLogDto> transactionLogDtos =
-    //        transactionRepository.findAllByTransactionDate(startDateTime, endDateTime,
-    // pageRequest);
-    List<TransactionLogDto> transactionLogDtos =
-        transactionRepository.findAllByTransactionDate(startDateTime, endDateTime);
-    return null;
+    logger.info("Ready to get transaction report from page " + searchablePage.getPage() +
+            "with each page conatins " + searchablePage.getTotal() + "element");
+    List<TransactionLogDto> transactionReport = transactionRepository.getTransactionReport(startDateTime, endDateTime, pageRequest);
+    return transactionReport;
   }
 }

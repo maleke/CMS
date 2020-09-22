@@ -8,7 +8,6 @@ import com.digipay.cardmanagement.dto.CardTransferRequestDto;
 import com.digipay.cardmanagement.entity.Card;
 import com.digipay.cardmanagement.entity.TransactionLog;
 import com.digipay.cardmanagement.entity.User;
-import com.digipay.cardmanagement.enums.TransactionStatus;
 import com.digipay.cardmanagement.exceptions.ServiceException;
 import com.digipay.cardmanagement.exceptions.error.ErrorCode;
 import com.digipay.cardmanagement.exceptions.error.FieldErrorDTO;
@@ -76,8 +75,8 @@ public class CardService {
             .setPin(cardTransferRequestDto.getPin())
             .setTransactionDate(TimeUtility.getCurrentDate());
 
-    if (result) transactionLog.setTransactionStatus(TransactionStatus.SUCCESS);
-    else transactionLog.setTransactionStatus(TransactionStatus.FAILED);
+    if (result) transactionLog.setSuccessStatus(1L);
+    else transactionLog.setFailStatus(1L);
 
     rabbitTemplate.convertAndSend(
         Constants.EXCHANGE_NAME, Constants.DATABASE_ROUTING_KEY_NAME, transactionLog);
