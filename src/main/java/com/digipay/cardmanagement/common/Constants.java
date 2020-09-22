@@ -9,5 +9,6 @@ public class Constants {
   public static final String DATABASE_QUEUE_NAME = "databaseFetchQueue";
   public static final String DATABASE_ROUTING_KEY_NAME = "*.database.*";
   public static final String DATABASE_DEAD_LETTER_QUEUE_NAME = "DatabaseFetchQueueDlx";
+  public static final String WAIT_QUEUE = INCOMING_QUEUE_NAME + ".wait";
   public static final String SUCCESSFUL_TRANSFER_MONEY = "انتقال وجه با موفقیت انجام شد";
 }

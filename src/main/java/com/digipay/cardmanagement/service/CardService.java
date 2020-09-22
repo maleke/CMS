@@ -16,6 +16,7 @@ import com.digipay.cardmanagement.repository.CardRepository;
 import com.digipay.cardmanagement.service.payment.PaymentService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -89,6 +90,7 @@ public class CardService {
         new ProviderMessageRequestDTO()
             .setMobileNo(user.getPhoneNumber())
             .setMessage(Constants.SUCCESSFUL_TRANSFER_MONEY);
+
     // using queue to notification service for increasing performance
     rabbitTemplate.convertAndSend(
         Constants.EXCHANGE_NAME,

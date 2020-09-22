@@ -1,7 +1,5 @@
 package com.digipay.cardmanagement.dto;
 
-import com.digipay.cardmanagement.common.search.Searchable;
-
 import java.io.Serializable;
 
 public class TransactionLogDto implements Serializable {
