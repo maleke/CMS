@@ -15,7 +15,7 @@ public class SmokeTest {
     private CardController cardController;
 
     @Test
-    public void contextLoads() throws Exception {
+    public void contextLoads() {
         assertThat(cardController).isNotNull();
     }
 }
