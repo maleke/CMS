@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.digipay</groupId>
-    <artifactId>cardmanagement</artifactId>
+    <artifactId>CardManagement</artifactId>
     <version>1.0.0</version>
-    <name>cardManagement</name>
+    <name>CardManagementSystem</name>
     <description>Card Management System</description>
 
     <properties>
