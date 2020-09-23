@@ -18,6 +18,25 @@ services:
       - POSTGRES_PASSWORD=postgres
     image: 'postgres:12.4'
 
+  cardmanagementsystem:
+    ports:
+      - '8001:8001'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+      - rabbitmq
+    image: 'cardmanagementsystem:1.0.0'
+
+  notificationservice:
+    ports:
+      - '8002:8002'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - rabbitmq
+    image: 'notificationservice:1.0.0'
+
 volumes:
   pgdata:
     driver: local

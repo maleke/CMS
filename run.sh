@@ -7,6 +7,6 @@ if [[ "$1" -eq "clean" ]]; then
 fi
 
 mvn package -DskipTests
-docker build . --rm -t CardManagement:1.0.0
-docker build . --rm -t NotificationService:1.0.0
+(cd CardManagementSystem && docker build . --rm -t cardmanagementsystem:1.0.0)
+(cd NotificationService && docker build . --rm -t notificationservice:1.0.0)
 docker-compose up -d --remove-orphans
