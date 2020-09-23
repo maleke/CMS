@@ -9,10 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
-  List<Card> findByUserId(@Param("userId") Long userId);
+  Set<Card> findByUserId(@Param("userId") Long userId);
 
   @Query("select c.user from Card c where (c.cardNumber = :cardNumber)")
 

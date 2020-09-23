@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "")
@@ -33,15 +34,15 @@ public class CardController {
 
     @ApiOperation(value = "(find cards) User can get card list")
     @GetMapping("/cards/{userId}")
-    public ResponseEntity<List<CardDto>> findCardsByUserId(@PathVariable Long userId){
+    public ResponseEntity<Set<CardDto>> findCardsByUserId(@PathVariable Long userId){
 
-        List<CardDto> result = cardService.findCardsByUserId(userId);
+        Set<CardDto> result = cardService.findCardsByUserId(userId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/payments/transfer")
-    public ResponseEntity<Void> cnpCardTransfer(@Valid @RequestBody CardTransferRequestDto cardTransferRequestDto) throws Exception {
-        cardService.cardTransfer(cardTransferRequestDto);
+    public ResponseEntity<Void> transferMoney(@Valid @RequestBody CardTransferRequestDto cardTransferRequestDto) throws Exception {
+        cardService.transferMoney(cardTransferRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

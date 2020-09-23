@@ -6,12 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CardMapper {
     CardDto cardToCardDto(Card card);
-    List<CardDto> cardsToCardDtos(List<Card> cards);
+    Set<CardDto> cardsToCardDtos(Set<Card> cards);
 
     Card cardDtoToCard(CardDto cardDto);
-    List<Card> cardDtosToCards(List<CardDto> cardDtos);
+    Set<Card> cardDtosToCards(Set<CardDto> cardDtos);
 }

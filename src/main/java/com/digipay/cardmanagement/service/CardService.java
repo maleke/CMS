@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CardService {
@@ -47,12 +48,12 @@ public class CardService {
     cardRepository.deleteById(id);
   }
 
-  public List<CardDto> findCardsByUserId(Long userId) {
-    List<Card> cards = cardRepository.findByUserId(userId);
+  public Set<CardDto> findCardsByUserId(Long userId) {
+    Set<Card> cards = cardRepository.findByUserId(userId);
     return cardMapper.cardsToCardDtos(cards);
   }
 
-  public void cardTransfer(CardTransferRequestDto cardTransferRequestDto) throws ServiceException {
+  public void transferMoney(CardTransferRequestDto cardTransferRequestDto) throws ServiceException {
     // call service for transferring money
     Boolean result = paymentService.transferMoney(cardTransferRequestDto);
     insertTransactionToDB(cardTransferRequestDto, result);
