@@ -1,6 +1,7 @@
 package com.digipay.cardmanagement.service.payment;
 
 import com.digipay.cardmanagement.dto.CardTransferRequestDto;
+import com.digipay.cardmanagement.dto.CardTransferResponseDto;
 import com.digipay.cardmanagement.interfaces.PaymentProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,13 +19,24 @@ public class SecondPaymentProvider implements PaymentProvider {
   @Value("${info.url.secondPaymentProviderUrl}")
   private String secondPaymentProviderUrl;
 
+  private final PaymentServiceMock paymentServiceMock;
+
+  public SecondPaymentProvider(PaymentServiceMock paymentServiceMock) {
+    this.paymentServiceMock = paymentServiceMock;
+  }
+
   @Override
   public Future<Boolean> transferMoney(CardTransferRequestDto cardTransferRequestDto) {
-    // call web service
-    Boolean result =true;
-    // Boolean result = restTemplate.postForObject(firstPaymentProviderUrl, cardTransferRequestDto, Boolean.class);
-    logger.info("result is:" + result);
-    return new AsyncResult<>(result);
+    // call webService
+    try {
+      CardTransferResponseDto cardTransferResponseDto =
+          paymentServiceMock.transferMoneyMock(cardTransferRequestDto, secondPaymentProviderUrl);
+      logger.info("result form secondPaymentProvider is:" + cardTransferResponseDto.getResult());
+      return new AsyncResult<>(cardTransferResponseDto.getResult());
+    } catch (Exception ex) {
+      logger.error("An error has been occurred while calling webservice" + ex.getMessage());
+      return new AsyncResult<>(false);
+    }
   }
 
   @Override
