@@ -3,7 +3,7 @@
 
 <configuration>
     <!--todo LogLevel must be INFO-->
-    <property name="LOG_LEVEL" value="DEBUG"/>
+    <property name="LOG_LEVEL" value="INFO"/>
     <property name="MY_HOME" value="/home/fatemeh"/>
     <property name="LOG_PATH" value="${MY_HOME}/NotificationService/logs"/>
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/Archived"/>
