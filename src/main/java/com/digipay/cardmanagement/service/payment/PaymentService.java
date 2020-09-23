@@ -3,6 +3,7 @@ package com.digipay.cardmanagement.service.payment;
 import com.digipay.cardmanagement.dto.CardTransferRequestDto;
 import com.digipay.cardmanagement.interfaces.PaymentProvider;
 import com.digipay.cardmanagement.service.CardService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -20,6 +21,7 @@ public class PaymentService {
     this.paymentProviderStrategy = paymentProviderStrategy;
   }
 
+  @HystrixCommand(fallbackMethod = "breaker")
   public Boolean transferMoney(CardTransferRequestDto cardTransferRequestDto) {
     String paymentProviderName =
         cardTransferRequestDto.getSource().startsWith("6037")
@@ -49,5 +51,9 @@ public class PaymentService {
 
   private PaymentProvider findPaymentProvider(String paymentProviderName) {
     return paymentProviderStrategy.get(paymentProviderName);
+  }
+
+  public Boolean breaker(CardTransferRequestDto cardTransferRequestDto) {
+    return false;
   }
 }

@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -33,12 +32,12 @@ public class CardManagementApplication {
         paymentProvider -> paymentProviderStrategy.put(paymentProvider.getName(), paymentProvider));
     return paymentProviderStrategy;
   }
+
   @Bean
-  public RestTemplate restTemplate(
-          RestTemplateBuilder restTemplateBuilder) {
+  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
     return restTemplateBuilder
-            .setConnectTimeout(Duration.ofSeconds(Long.parseLong(cardManagementToPaymentProvider)))
-            .setReadTimeout(Duration.ofSeconds(Long.parseLong(cardManagementToPaymentProvider)))
-            .build();
+        .setConnectTimeout(Duration.ofSeconds(Long.parseLong(cardManagementToPaymentProvider)))
+        .setReadTimeout(Duration.ofSeconds(Long.parseLong(cardManagementToPaymentProvider)))
+        .build();
   }
 }
