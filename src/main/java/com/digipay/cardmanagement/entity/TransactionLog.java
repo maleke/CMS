@@ -13,13 +13,8 @@ import java.io.Serializable;
     })
 public class TransactionLog implements Serializable {
   @Id
-  //@GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", updatable = false, nullable = false)
-    @SequenceGenerator(
-        name = "transaction_log_id_seq",
-        sequenceName = "transaction_log_id_seq",
-        allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_log_id_seq")
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   @NotNull(message = "{null.cardNumber}")
@@ -28,14 +23,8 @@ public class TransactionLog implements Serializable {
   @NotNull(message = "{null.dest}")
   private String dest;
 
-  @NotNull(message = "{null.cvv2}")
-  private String cvv2;
-
   @NotNull(message = "{null.expDate}")
   private String expDate;
-  // todo:: encrypt pin for save in database
-  @NotNull(message = "{null.pin}")
-  private String pin;
 
   @Column(name = "transaction_date")
   private String transactionDate;
@@ -65,30 +54,12 @@ public class TransactionLog implements Serializable {
     return this;
   }
 
-  public String getCvv2() {
-    return cvv2;
-  }
-
-  public TransactionLog setCvv2(String cvv2) {
-    this.cvv2 = cvv2;
-    return this;
-  }
-
   public String getExpDate() {
     return expDate;
   }
 
   public TransactionLog setExpDate(String expDate) {
     this.expDate = expDate;
-    return this;
-  }
-
-  public String getPin() {
-    return pin;
-  }
-
-  public TransactionLog setPin(String pin) {
-    this.pin = pin;
     return this;
   }
 
@@ -121,15 +92,22 @@ public class TransactionLog implements Serializable {
 
   // endregion
 
-
   @Override
   public String toString() {
-    return "TransactionLog{" +
-            "source='" + source + '\'' +
-            ", dest='" + dest + '\'' +
-            ", transactionDate='" + transactionDate + '\'' +
-            ", successStatus=" + successStatus +
-            ", failStatus=" + failStatus +
-            '}';
+    return "TransactionLog{"
+        + "source='"
+        + source
+        + '\''
+        + ", dest='"
+        + dest
+        + '\''
+        + ", transactionDate='"
+        + transactionDate
+        + '\''
+        + ", successStatus="
+        + successStatus
+        + ", failStatus="
+        + failStatus
+        + '}';
   }
 }
