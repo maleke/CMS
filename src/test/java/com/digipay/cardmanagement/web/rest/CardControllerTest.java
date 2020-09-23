@@ -3,11 +3,9 @@ package com.digipay.cardmanagement.web.rest;
 import com.digipay.cardmanagement.dto.CardDto;
 import com.digipay.cardmanagement.dto.CardTransferRequestDto;
 import com.digipay.cardmanagement.entity.Card;
-import com.digipay.cardmanagement.entity.User;
 import com.digipay.cardmanagement.mapper.CardMapper;
-import com.digipay.cardmanagement.repository.CardRepository;
-import com.digipay.cardmanagement.repository.UserRepository;
 import com.digipay.cardmanagement.service.CardService;
+import com.digipay.cardmanagement.utility.JsonUtility;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -16,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,6 +31,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 
@@ -50,17 +47,6 @@ public class CardControllerTest {
     @MockBean
     CardMapper cardMapper;
 
-
-    protected String mapToJson(Object obj) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(obj);
-    }
-    protected <T> T mapFromJson(String json, Class<T> clazz)
-            throws JsonParseException, JsonMappingException, IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(json, clazz);
-    }
     @Test
     void transferMoneyTest() throws Exception {
         CardTransferRequestDto cardTransferRequestDto = new CardTransferRequestDto()
@@ -69,7 +55,7 @@ public class CardControllerTest {
                 .setExpDate("0002").setAmount(1000L);
 
         // execute
-        String cardTransferRequest = mapToJson(cardTransferRequestDto);
+        String cardTransferRequest = JsonUtility.mapToJson(cardTransferRequestDto);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/payments/transfer")
                 .accept(MediaType.APPLICATION_JSON)
@@ -81,7 +67,6 @@ public class CardControllerTest {
         // verify
         int status = result.getResponse().getStatus();
         assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
-
         // verify that service method was called once
         verify(cardService).transferMoney(any(CardTransferRequestDto.class));
 
@@ -105,5 +90,13 @@ public class CardControllerTest {
     }
 
 
+    @Test
+    void deleteCardTest() throws Exception{
+        MvcResult result = mockMvc.perform(delete("/cards/{id}",1L)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        int status = result.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), status, "Incorrect Response Status");
+    }
 }
 

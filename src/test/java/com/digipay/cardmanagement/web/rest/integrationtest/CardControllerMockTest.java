@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -29,7 +29,7 @@ public class CardControllerMockTest {
     private CardRepository cardRepository;
 
     @Test
-    void testFindCardsByUserId(){
+    void testFindCardsByUserId() {
         Set<Card> cards = new HashSet<>();
         Card card = new Card().setCardNumber("6104234556784986")
                 .setCvv2("1234")
@@ -39,7 +39,7 @@ public class CardControllerMockTest {
         User user = new User().setId(1000L).setName("testUser")
                 .setPhoneNumber("09999999999")
                 .setCards(cards);
-        Set<CardDto> cardDtos= new HashSet<>();
+        Set<CardDto> cardDtos = new HashSet<>();
         CardDto cardDto = new CardDto().setCardNumber(card.getCardNumber())
                 .setCvv2(card.getCvv2())
                 .setExpDate(card.getExpDate())
@@ -47,6 +47,7 @@ public class CardControllerMockTest {
         cardDtos.add(cardDto);
         when(cardRepository.findByUserId(1000L)).thenReturn(cards);
         when(cardMapper.cardsToCardDtos(cards)).thenReturn(cardDtos);
-        assertTrue(cardService.findCardsByUserId(1000L).equals(cardDtos));
+        assertEquals(cardService.findCardsByUserId(1000L), cardDtos,"Unexpected result");
     }
+
 }
